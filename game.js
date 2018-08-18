@@ -40,16 +40,20 @@
     // cls for first time
     cls();
 
-    // CARD CLASS
+    // CLASES
+    // Card Class
     var Card = function (opt) {
 
-        this.attack = opt.attack;
-        this.hpMax = opt.hpMax;
+        this.hpMax = opt.hpMax; // maxhp
+        this.att = opt.att; // attack
+        this.def = opt.def; // defence
+
+        // set current hp to max
         this.hp = this.hpMax;
 
     };
 
-    // DECK CLASS
+    // Decl Class
     var Deck = function () {
 
         // faction index (player or ai deck)
@@ -60,7 +64,31 @@
 
     };
 
-    // MATCH CLASS
+    proto = Deck.prototype;
+
+    // Deck.genDeck(faction)
+    proto.genDeck = function (faction) {
+
+        this.cards = [];
+
+        var ci = 0,
+        dSize = 10;
+        while (ci < dSize) {
+
+            this.cards.push({
+                faction: faction,
+                hpMax: Math.floor(Math.ramdom() * 5 + 15),
+                att: Math.floor(Math.ramdom() * 7 + 3),
+                def: Math.floor(Math.ramdom() * 3 + 2)
+            });
+
+            ci += 1;
+
+        }
+
+    }
+
+    // Match Class
     var Match = function () {
 
         this.turn = 0;
@@ -72,7 +100,19 @@
     var state = {
 
         currentState: 'init',
+
+        // initialization state
         init: function () {
+
+            this.currentState = 'game';
+
+        },
+
+        game: function () {},
+
+        update: function () {
+
+            this[this.currentState]();
 
         }
 
@@ -81,9 +121,16 @@
     // RENDERER
     var render = {
 
+        // the should be a noop function, or even undefined in production
         init: function () {
 
-            ctx.fillText('init state',10,10);
+            ctx.fillText('init state', 10, 10);
+
+        },
+
+        game: function () {
+
+            ctx.fillText('game state', 10, 10);
 
         },
 
@@ -106,21 +153,24 @@
 
     };
 
-    // EVENTS
+    // EVENT(S)
+    // call main update method of state machine
+    // and render on each click/press
     canvas.addEventListener('click', function (e) {
 
         //var bx = e.target.getBoundingClientRect();
         // x = e.clientX - bx.left,
         // y = e.clientY - bx.top;
 
-        var x = e.clientX,
-        y = e.clientY;
-
-        console.log(x, y);
-		
-		render.main();
+        // update, and render
+        state.update(e.clientX, e.clientY);
+        render.main();
 
     });
+
+    // first call of main update, and render methods
+    // by simulating a click at 0,0
+    canvas.click(0, 0);
 
 }
     ());
