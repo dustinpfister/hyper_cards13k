@@ -66,7 +66,30 @@
         this.turn = 0;
         this.curFact = 0; // current faction index
 
-    }
+    };
+
+    // STATE MACHINE
+    var state = {
+
+        init: function () {},
+
+    };
+
+    var render = function () {};
+
+    // EVENTS
+    canvas.addEventListener('click', function (e) {
+
+        //var bx = e.target.getBoundingClientRect();
+        // x = e.clientX - bx.left,
+        // y = e.clientY - bx.top;
+
+        var x = e.clientX,
+        y = e.clientY;
+
+        console.log(x, y);
+
+    });
 
 }
     ());
