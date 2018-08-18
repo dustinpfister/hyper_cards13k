@@ -24,7 +24,7 @@
     // clear screen helper
     var cls = function () {
 
-        ctx.fillStyle = 'balck';
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     };
@@ -71,11 +71,40 @@
     // STATE MACHINE
     var state = {
 
-        init: function () {},
+        currentState: 'init',
+        init: function () {
+
+        }
 
     };
 
-    var render = function () {};
+    // RENDERER
+    var render = {
+
+        init: function () {
+
+            ctx.fillText('init state',10,10);
+
+        },
+
+        // main render method
+        main: function () {
+
+            // clear the screen to black
+            cls();
+
+            // default fill style to white
+            // after cls to back screen
+            ctx.fillStyle = 'white';
+
+            ctx.textBaseline = 'center';
+
+            // run render method for current state
+            this[state.currentState]();
+
+        }
+
+    };
 
     // EVENTS
     canvas.addEventListener('click', function (e) {
@@ -88,6 +117,8 @@
         y = e.clientY;
 
         console.log(x, y);
+		
+		render.main();
 
     });
 
